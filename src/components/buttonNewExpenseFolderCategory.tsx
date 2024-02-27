@@ -90,7 +90,7 @@ export function ButtonNewExpenseFolderCategory(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className={props.className}>New Expenses</Button>
+        <Button className={props.className}>New</Button>
       </DialogTrigger>
       <DialogContent className="max-w-[325px]">
         <Form {...form}>
