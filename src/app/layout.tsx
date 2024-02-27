@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
 import { useSwipeable } from "react-swipeable";
+import { useAtom } from "jotai";
+
+import { state_expenseCategory, state_expenseList } from "@/states";
+import { ls_getExpenseCategories, ls_getExpenseList, ls_setTestExpenses } from "@/lib/localStorage";
 
 import { ThemeProvider } from "@/components/themeProvider";
 import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
@@ -20,6 +22,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // TODO: Remove
+  ls_setTestExpenses();
+
+  const [expenseList, setExpenseList] = useAtom(state_expenseList);
+  const [expenseCategory, setExpenseCategory] = useAtom(state_expenseCategory);
+
+  React.useEffect(() => {
+    // Load Expense Data from Local Storage
+    const lsExpenseList = ls_getExpenseList();
+    const lsExpenseCategory = ls_getExpenseCategories();
+
+    setExpenseList(lsExpenseList);
+    setExpenseCategory(lsExpenseCategory);
+  }, []);
+
+  // Drawer Controls
   const leftDrawerButton: React.RefObject<HTMLButtonElement> = React.createRef();
   const handleSwipe = useSwipeable({
     onSwiped: (eventData) => {
