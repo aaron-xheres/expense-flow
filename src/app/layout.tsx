@@ -7,7 +7,7 @@ import { useSwipeable } from "react-swipeable";
 import { useAtom } from "jotai";
 
 import { state_expenseCategory, state_expenseList } from "@/states";
-import { ls_getExpenseCategories, ls_getExpenseList, ls_setTestExpenses } from "@/lib/localStorage";
+import { ls_ensureDefaultExists, ls_getExpenseCategories, ls_getExpenseList } from "@/lib/localStorage";
 
 import { ThemeProvider } from "@/components/themeProvider";
 import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
@@ -22,13 +22,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // TODO: Remove
-  ls_setTestExpenses();
-
-  const [expenseList, setExpenseList] = useAtom(state_expenseList);
+  const [, setExpenseList] = useAtom(state_expenseList);
   const [expenseCategory, setExpenseCategory] = useAtom(state_expenseCategory);
 
   React.useEffect(() => {
+    // Ensure that default Local Storage data exists
+    ls_ensureDefaultExists();
+
     // Load Expense Data from Local Storage
     const lsExpenseList = ls_getExpenseList();
     const lsExpenseCategory = ls_getExpenseCategories();
@@ -59,7 +59,7 @@ export default function RootLayout({
           <div className="flex min-h-svh flex-col">
             <Header drawerOpenFn={() => leftDrawerButton.current?.click()} />
             <Separator />
-            <div {...handleSwipe} className="flex flex-grow">
+            <div {...handleSwipe} className="flex flex-grow justify-center">
               <Drawer direction="left">
                 <DrawerTrigger asChild>
                   <button className="hidden h-0 w-0" ref={leftDrawerButton} />

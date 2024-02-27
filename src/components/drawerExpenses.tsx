@@ -7,13 +7,14 @@ import { ModeToggle } from "./modeToggle";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useMemo } from "react";
+import { ButtonNewExpenseFolderCategory } from "./buttonNewExpenseFolderCategory";
 
 export function DrawerExpenses() {
   const [expenseList] = useAtom(state_expenseList);
   const [expenseCategory] = useAtom(state_expenseCategory);
 
-  console.log("expense list", expenseList);
-  console.log("expense category", expenseCategory);
+  console.log('state', expenseCategory)
 
   return (
     <>
@@ -25,17 +26,19 @@ export function DrawerExpenses() {
         </DrawerClose>
       </div>
       <ScrollArea className="flex h-full flex-grow p-4">
-        {expenseCategory.map((category) => (
-          <div key={category.id}>
-            <h1>{category.name}</h1>
+        {expenseCategory.toReversed().map((category) => (
+          <div key={category.id} className="mb-4">
+            <h1 className={category.id === -1 ? "text-secondary" : ""}>{category.name}</h1>
             {category.list.map((id) => {
               const expense = expenseList.find((list) => list.id === id);
               return (
                 <Link key={id} href={`/expense/${id}`}>
                   <DrawerClose asChild>
-                    <Button variant="outline" className="my-1 min-w-full justify-start">
+                    <Button variant="outline" className="my-2 min-w-full justify-start">
                       <div className="flex w-full">{expense?.name}</div>
-                      <div className="ml-auto flex">{expense?.currency}</div>
+                      <div className="ml-auto flex">
+                        {expense?.currency} {expense?.total}
+                      </div>
                     </Button>
                   </DrawerClose>
                 </Link>
@@ -49,8 +52,9 @@ export function DrawerExpenses() {
           <Separator className="my-2 w-[90%]" />
         </div>
         <div>
-          <DrawerFooter>
-            <ModeToggle className="self-end" />
+          <DrawerFooter className="flex-row">
+            <ButtonNewExpenseFolderCategory className="w-full" />
+            <ModeToggle />
           </DrawerFooter>
         </div>
       </div>

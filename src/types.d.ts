@@ -8,6 +8,7 @@ type Expense = {
   id: number;
   name: string;
   currency: string;
+  total: number;
 };
 
 type ExpenseData = {
