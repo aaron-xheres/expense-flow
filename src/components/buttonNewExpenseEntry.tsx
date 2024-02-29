@@ -1,6 +1,5 @@
 "use client";
 
-import { useAtom, type WritableAtom } from "jotai";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,6 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Input } from "@/components/ui/input";
 import { createRef, RefObject } from "react";
+
+type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
 
 const formSchema = z.object({
   name: z.string().min(2).max(32),
@@ -27,12 +28,9 @@ const formSchema = z.object({
 type Props = {
   className?: string;
   currency: string;
-  atomExpenseData: WritableAtom<ExpenseData[], [ExpenseData[], (draft: ExpenseData[]) => void], void>;
 };
 
 export function ButtonNewExpenseEntry(props: Props) {
-  const [expenseData, setExpenseData] = useAtom(props.atomExpenseData);
-
   const btnDrawerClose: RefObject<HTMLButtonElement> = createRef();
 
   // Define form.

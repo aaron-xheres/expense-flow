@@ -6,9 +6,6 @@ import "./globals.css";
 import { useSwipeable } from "react-swipeable";
 import { useAtom } from "jotai";
 
-import { state_expenseCategory, state_expenseList } from "@/states";
-import { ls_ensureDefaultExists, ls_getExpenseCategories, ls_getExpenseList } from "@/lib/localStorage";
-
 import { ThemeProvider } from "@/components/themeProvider";
 import { Drawer, DrawerTrigger, DrawerContentUndecorated } from "@/components/ui/drawer";
 import { DrawerExpenses } from "@/components/drawerExpenses";
@@ -22,21 +19,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [, setExpenseList] = useAtom(state_expenseList);
-  const [expenseCategory, setExpenseCategory] = useAtom(state_expenseCategory);
-
-  React.useEffect(() => {
-    // Ensure that default Local Storage data exists
-    ls_ensureDefaultExists();
-
-    // Load Expense Data from Local Storage
-    const lsExpenseList = ls_getExpenseList();
-    const lsExpenseCategory = ls_getExpenseCategories();
-
-    setExpenseList(lsExpenseList);
-    setExpenseCategory(lsExpenseCategory);
-  }, []);
-
   // Drawer Controls
   const leftDrawerButton: React.RefObject<HTMLButtonElement> = React.createRef();
   const handleSwipe = useSwipeable({

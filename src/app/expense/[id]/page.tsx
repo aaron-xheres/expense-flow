@@ -5,7 +5,6 @@ import { useAtom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 
 import * as CONST from "@/consts";
-import { ls_getExpenseById, ls_getExpenseDataById } from "@/lib/localStorage";
 import { columns } from "./column";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,16 +21,16 @@ export default function ExpensePage({ params }: { params: { id: string } }) {
   const [expense, setExpense] = useAtom(state_expense);
 
   useEffect(() => {
-    const lsExpenseData = ls_getExpenseDataById(id);
-    const lsExpense = ls_getExpenseById(id);
+    // const lsExpenseData = ls_getExpenseDataById(id);
+    // const lsExpense = ls_getExpenseById(id);
 
-    if (!lsExpense || !lsExpenseData) {
-      console.error(id, lsExpense, lsExpenseData);
-      throw new Error("[expense] invalid expense or expense data");
-    }
+    // if (!lsExpense || !lsExpenseData) {
+    //   console.error(id, lsExpense, lsExpenseData);
+    //   throw new Error("[expense] invalid expense or expense data");
+    // }
 
-    setExpense(lsExpense);
-    setExpenseData(lsExpenseData);
+    // setExpense(lsExpense);
+    // setExpenseData(lsExpenseData);
   }, []);
 
   return (
@@ -50,7 +49,7 @@ export default function ExpensePage({ params }: { params: { id: string } }) {
         <DataTable columns={columns} data={expenseData} />
       </div>
       <div className="min-w-full">
-        <ButtonNewExpenseEntry className="w-full" currency={expense.currency} atomExpenseData={state_expenseData} />
+        <ButtonNewExpenseEntry className="w-full" currency={expense.currency} atomExpenseData={state_expenseData} setExpense={setExpense} />
       </div>
     </div>
   );

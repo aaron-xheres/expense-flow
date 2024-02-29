@@ -6,13 +6,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Input } from "@/components/ui/input";
 
-import { useAtom } from "jotai";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { state_expenseCategory, state_expenseList } from "@/states";
-import { ls_addExpenseCategory, ls_addExpenseList } from "@/lib/localStorage";
 import { RefObject, createRef } from "react";
+import { db, db_addExpense } from "@/lib/db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 const formSchema = z.object({
   type: z.string().refine((v) => v === "category" || v === "expense"),
@@ -26,10 +25,8 @@ type Props = {
 };
 
 export function ButtonNewExpenseFolderCategory(props: Props) {
-  const [expenseCategory, setExpenseCategory] = useAtom(state_expenseCategory);
-  const [, setExpenseList] = useAtom(state_expenseList);
-
   const btnDialogClose: RefObject<HTMLButtonElement> = createRef();
+  const expenseCategory = useLiveQuery(() => db.expenseCategory.toArray());
 
   // Define form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,10 +48,7 @@ export function ButtonNewExpenseFolderCategory(props: Props) {
         list: [],
       };
 
-      setExpenseCategory((draft) => {
-        draft.push(newCategory);
-      });
-      ls_addExpenseCategory(newCategory);
+      db.expenseCategory.put(newCategory)
     }
 
     if (values.type === "expense") {
@@ -71,24 +65,11 @@ export function ButtonNewExpenseFolderCategory(props: Props) {
         total: 0,
       };
 
-      setExpenseList((draft) => {
-        draft.push(newExpense);
-      });
-      setExpenseCategory((draft) => {
-        const category = draft.find((c) => c.id === categoryId);
-        if (!category) {
-          throw new Error("[new expense form] invalid category id: category not found");
-        }
-
-        category.list.push(newExpense.id);
-      });
-
-      ls_addExpenseList(categoryId, newExpense);
+      db_addExpense(categoryId, newExpense)
     }
 
     btnDialogClose.current?.click();
     form.reset();
-    console.log("[form submit]", values);
   }
 
   return (
@@ -164,7 +145,7 @@ export function ButtonNewExpenseFolderCategory(props: Props) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {expenseCategory.toReversed().map((category) => (
+                          {expenseCategory?.toReversed().map((category) => (
                             <SelectItem key={category.id} value={`${category.id}`}>
                               {category.name}
                             </SelectItem>

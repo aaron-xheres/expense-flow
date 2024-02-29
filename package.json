@@ -21,6 +21,8 @@
     "@tanstack/react-table": "^8.13.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "dexie": "^3.2.5",
+    "dexie-react-hooks": "^1.1.7",
     "immer": "^10.0.3",
     "jotai": "^2.6.5",
     "jotai-immer": "^0.3.0",
