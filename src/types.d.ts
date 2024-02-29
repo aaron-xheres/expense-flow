@@ -15,5 +15,6 @@ type ExpenseData = {
   id: number;
   name: string;
   amount: number;
+  badge: 'food' | 'transport' | 'entertainment' | 'bills' | 'others' | ''
   description?: string;
 };

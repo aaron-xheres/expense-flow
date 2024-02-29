@@ -20,6 +20,7 @@ export const ls_setTestExpenses = (id: number = 0) => {
       id: 0,
       name: "Test Spending",
       amount: 99.99,
+      badge: 'others',
       description: "Test Description",
     },
   ];
@@ -44,6 +45,12 @@ export const ls_getExpenseList = (): Expense[] => {
   return r ? JSON.parse(r) : [];
 };
 
+export const ls_getExpenseById = (id: number): Expense | null => {
+  const list = ls_getExpenseList();
+  const r = list.find((expense) => expense.id === id);
+  return r ?? null;
+};
+
 export const ls_getExpenseCategories = (): ExpenseCategory[] => {
   const r = localStorage.getItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY);
   return r ? JSON.parse(r) : [];
@@ -55,9 +62,15 @@ export const ls_getExpenseCategoryById = (id: number): ExpenseCategory | null =>
   return r ?? null;
 };
 
-export const ls_getExpenseDataById = (id: string): ExpenseData | null => {
+export const ls_getExpenseDataById = (id: number): ExpenseData[] | null => {
   const r = localStorage.getItem(`${CONST.LOCALSTORAGE_KEY.EXPENSE_PREFIX}${id}`);
   return r ? JSON.parse(r) : r;
+};
+
+export const ls_getExpenseEntryById = (dataId: number, entryId: number): ExpenseData | null => {
+  const data = ls_getExpenseDataById(dataId);
+  const r = data?.find((entry) => entry.id === entryId);
+  return r ?? null;
 };
 
 export const ls_ensureDefaultExists = (): void => {
@@ -68,30 +81,32 @@ export const ls_ensureDefaultExists = (): void => {
 
   const expenseCategory = localStorage.getItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY);
   if (!expenseCategory) {
-    localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY, `[${JSON.stringify(CONST.DEFAULT_EXPENSE_CATEGORY)}]`);
+    localStorage.setItem(
+      CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY,
+      `[${JSON.stringify(CONST.DEFAULT_EXPENSE_CATEGORY)}]`
+    );
   }
 };
 
-
 export const ls_addExpenseCategory = (category: ExpenseCategory): void => {
-  const categories = ls_getExpenseCategories()
-  categories.push(category)
-  localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY, JSON.stringify(categories))
-}
+  const categories = ls_getExpenseCategories();
+  categories.push(category);
+  localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY, JSON.stringify(categories));
+};
 
 export const ls_addExpenseList = (categoryId: number, expense: Expense): void => {
   const categories = ls_getExpenseCategories();
-  const idx = categories.findIndex((c) => c.id === categoryId)
-  if(idx === null) {
-    throw new Error('[ls_addExpenseList] invalid category id')
+  const idx = categories.findIndex((c) => c.id === categoryId);
+  if (idx === null) {
+    throw new Error("[ls_addExpenseList] invalid category id");
   }
 
-  categories[idx].list.push(expense.id)
+  categories[idx].list.push(expense.id);
 
   const list = ls_getExpenseList();
   list.push(expense);
 
-  localStorage.setItem(`${CONST.LOCALSTORAGE_KEY.EXPENSE_PREFIX}${expense.id}`, '[]')
-  localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_LIST, JSON.stringify(list))
-  localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY, JSON.stringify(categories))
-}
+  localStorage.setItem(`${CONST.LOCALSTORAGE_KEY.EXPENSE_PREFIX}${expense.id}`, "[]");
+  localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_LIST, JSON.stringify(list));
+  localStorage.setItem(CONST.LOCALSTORAGE_KEY.EXPENSE_CATEGORY, JSON.stringify(categories));
+};

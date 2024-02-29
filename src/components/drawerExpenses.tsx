@@ -1,3 +1,5 @@
+"use client";
+
 import { useAtom } from "jotai";
 import { state_expenseList, state_expenseCategory } from "@/states";
 
@@ -7,14 +9,11 @@ import { ModeToggle } from "./modeToggle";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { useMemo } from "react";
 import { ButtonNewExpenseFolderCategory } from "./buttonNewExpenseFolderCategory";
 
 export function DrawerExpenses() {
   const [expenseList] = useAtom(state_expenseList);
   const [expenseCategory] = useAtom(state_expenseCategory);
-
-  console.log('state', expenseCategory)
 
   return (
     <>

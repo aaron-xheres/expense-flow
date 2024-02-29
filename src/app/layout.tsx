@@ -10,7 +10,7 @@ import { state_expenseCategory, state_expenseList } from "@/states";
 import { ls_ensureDefaultExists, ls_getExpenseCategories, ls_getExpenseList } from "@/lib/localStorage";
 
 import { ThemeProvider } from "@/components/themeProvider";
-import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerTrigger, DrawerContentUndecorated } from "@/components/ui/drawer";
 import { DrawerExpenses } from "@/components/drawerExpenses";
 import { Header } from "./header";
 import { Separator } from "@/components/ui/separator";
@@ -64,9 +64,9 @@ export default function RootLayout({
                 <DrawerTrigger asChild>
                   <button className="hidden h-0 w-0" ref={leftDrawerButton} />
                 </DrawerTrigger>
-                <DrawerContent className="min-h-full max-w-[80%] rounded-none">
+                <DrawerContentUndecorated className="min-h-full max-w-[80%] rounded-none">
                   <DrawerExpenses />
-                </DrawerContent>
+                </DrawerContentUndecorated>
               </Drawer>
               {children}
             </div>
