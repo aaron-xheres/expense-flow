@@ -4,7 +4,6 @@ import React from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { useSwipeable } from "react-swipeable";
-import { useAtom } from "jotai";
 
 import { ThemeProvider } from "@/components/themeProvider";
 import { Drawer, DrawerTrigger, DrawerContentUndecorated } from "@/components/ui/drawer";

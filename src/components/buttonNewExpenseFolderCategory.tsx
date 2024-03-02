@@ -52,7 +52,6 @@ export function ButtonNewExpenseFolderCategory(props: Props) {
     }
 
     if (values.type === "expense") {
-      console.log(values.categoryId);
       const categoryId = parseInt(values.categoryId);
       if (Number.isNaN(categoryId)) {
         throw new Error("[new expense form] invalid category id: value is not a number");

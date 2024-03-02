@@ -11,10 +11,10 @@ type Expense = {
   total: number;
 };
 
-type ExpenseData = {
-  id: number;
-  name: string;
+type ExpenseEntry = {
+  id?: number;
+  title: string;
   amount: number;
-  badge: 'food' | 'transport' | 'entertainment' | 'bills' | 'others' | ''
-  description?: string;
+  tag: string;
+  entryOf: number;
 };

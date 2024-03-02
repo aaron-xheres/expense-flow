@@ -10,24 +10,23 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Input } from "@/components/ui/input";
 import { createRef, RefObject } from "react";
-
-type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
+import { db, db_addExpeseEntry } from "@/lib/db";
 
 const formSchema = z.object({
   name: z.string().min(2).max(32),
-  amount: z.preprocess(x => parseFloat(z.string().parse(x)), z.number().refine(x => x * 100 - Math.trunc(x * 100) < Number.EPSILON)),
-  badge: z
+  amount: z.preprocess(
+    (x) => parseFloat(z.string().parse(x)),
+    z.number().min(0.01).max(99999)
+  ),
+  tag: z
     .string()
-    .refine(
-      (r) =>
-        r === "food" || r === "transport" || r === "entertainment" || r === "bills" || r === "others" || r === "none"
-    ),
-  description: z.string().optional()
+    .refine((r) => r === "🍔" || r === "🚈" || r === "🎮" || r === "📝" || r === "-"),
 });
 
 type Props = {
   className?: string;
-  currency: string;
+  expense?: Expense;
+  expenseEntries?: ExpenseEntry[];
 };
 
 export function ButtonNewExpenseEntry(props: Props) {
@@ -38,16 +37,24 @@ export function ButtonNewExpenseEntry(props: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      badge: "none",
-      description: "",
+      tag: "-"
     },
   });
 
   // Submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const id = Date.now();
+    const newEntry = {
+      title: values.name,
+      amount: values.amount,
+      tag: values.tag,
+      entryOf: props.expense!.id,
+    };
+
+    db_addExpeseEntry(props.expense!.id, newEntry);
+
     btnDrawerClose.current?.click();
     form.reset();
-    console.log("[form submit]", values);
   }
 
   return (
@@ -63,7 +70,7 @@ export function ButtonNewExpenseEntry(props: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
                   </FormControl>
@@ -76,9 +83,16 @@ export function ButtonNewExpenseEntry(props: Props) {
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount ({props.currency})</FormLabel>
+                  <FormLabel>Amount ({props.expense?.currency})</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="0.00" defaultValue="" step="0.01" onChange={field.onChange} onBlur={field.onBlur} />
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      defaultValue=""
+                      step="0.01"
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,38 +100,24 @@ export function ButtonNewExpenseEntry(props: Props) {
             />
             <FormField
               control={form.control}
-              name="description"
+              name="tag"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description (Optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="badge"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Badge</FormLabel>
+                  <FormLabel>Tag</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="No Badge" />
+                        <SelectValue placeholder="No Tag" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem className="text-secondary" value="none">
-                        No Badge
+                        No Tag
                       </SelectItem>
-                      <SelectItem value="food">🍔 Food</SelectItem>
-                      <SelectItem value="transport">🚈 Transport</SelectItem>
-                      <SelectItem value="entertainment">🎮 Entertainment</SelectItem>
-                      <SelectItem value="bills">📝 Bills</SelectItem>
-                      <SelectItem value="others">❓ Others</SelectItem>
+                      <SelectItem value="🍔">🍔 Food</SelectItem>
+                      <SelectItem value="🚈">🚈 Transport</SelectItem>
+                      <SelectItem value="🎮">🎮 Entertainment</SelectItem>
+                      <SelectItem value="📝">📝 Bills</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

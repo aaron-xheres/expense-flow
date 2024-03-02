@@ -1,4 +1,4 @@
-export const LOCALSTORAGE_KEY = {
+export const IDB_STORES = {
   EXPENSE_PREFIX: "expense-",
   EXPENSE_LIST: "expense-list",
   EXPENSE_CATEGORY: "expense-category",
@@ -17,9 +17,10 @@ export const DEFAULT_EXPENSE: Expense = {
   total: 0,
 };
 
-export const DEFAULT_EXPENSE_DATA: ExpenseData = {
+export const DEFAULT_EXPENSE_DATA: ExpenseEntry = {
   id: -1,
-  name: "",
+  title: "",
   amount: 0,
-  badge: "",
+  tag: "",
+  entryOf: -1
 };
