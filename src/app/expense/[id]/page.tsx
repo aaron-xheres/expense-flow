@@ -22,7 +22,7 @@ export default function ExpensePage({ params }: { params: { id: string } }) {
           <br />
           <CardDescription>
             {expense?.currency}
-            {expense?.total}
+            {expense?.total.toFixed(2)}
           </CardDescription>
         </CardHeader>
       </Card>

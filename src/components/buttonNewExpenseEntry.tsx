@@ -21,7 +21,7 @@ const formSchema = z.object({
   tag: z
     .string()
     .refine((r) => r === "🍔" || r === "🚈" || r === "🎮" || r === "📝" || r === "-"),
-  description: z.string().optional()
+  description: z.string().max(32).optional()
 });
 
 type Props = {

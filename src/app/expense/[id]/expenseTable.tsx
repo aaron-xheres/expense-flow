@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ButtonDeleteExpenseEntry } from "@/components/buttonDeleteExpenseEntry";
+import { cn } from "@/lib/utils";
 
 type Props = {
   className?: string;
@@ -45,7 +46,7 @@ export default function ExpenseTable(props: Props) {
                     <AccordionContent>
                       <div className="flex flex-row items-center justify-center align-middle">
                         <div className="flex flex-grow">
-                          <p className={entry.description && entry.description !== "" ? "" : "text-secondary"}>
+                          <p className={cn("font-light", entry.description && entry.description !== "" ? "" : "text-secondary")}>
                             {entry.description && entry.description !== "" ? entry.description : "No Description"}
                           </p>
                         </div>
