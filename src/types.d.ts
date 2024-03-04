@@ -16,5 +16,6 @@ type ExpenseEntry = {
   title: string;
   amount: number;
   tag: string;
+  description?: string;
   entryOf: number;
 };

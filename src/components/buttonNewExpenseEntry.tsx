@@ -13,7 +13,7 @@ import { createRef, RefObject } from "react";
 import { db, db_addExpeseEntry } from "@/lib/db";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(32),
+  name: z.string().min(2).max(24),
   amount: z.preprocess(
     (x) => parseFloat(z.string().parse(x)),
     z.number().min(0.01).max(99999)
@@ -21,6 +21,7 @@ const formSchema = z.object({
   tag: z
     .string()
     .refine((r) => r === "🍔" || r === "🚈" || r === "🎮" || r === "📝" || r === "-"),
+  description: z.string().optional()
 });
 
 type Props = {
@@ -37,7 +38,7 @@ export function ButtonNewExpenseEntry(props: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      tag: "-"
+      tag: "-",
     },
   });
 
@@ -48,6 +49,7 @@ export function ButtonNewExpenseEntry(props: Props) {
       title: values.name,
       amount: values.amount,
       tag: values.tag,
+      description: values.description,
       entryOf: props.expense!.id,
     };
 
@@ -120,6 +122,19 @@ export function ButtonNewExpenseEntry(props: Props) {
                       <SelectItem value="📝">📝 Bills</SelectItem>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input placeholder="" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

@@ -1,7 +1,10 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ButtonDeleteExpenseEntry } from "@/components/buttonDeleteExpenseEntry";
 
 type Props = {
   className?: string;
@@ -13,37 +16,50 @@ export default function ExpenseTable(props: Props) {
   console.log(props.expenseEntries);
 
   return (
-    <Table className="border">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="min-w-full border-r pl-4">Title</TableHead>
-          <TableHead className="w-24 text-left">Amount</TableHead>
+    <Table>
+      <TableHeader className="border-b-2">
+        <TableRow className="hover:bg-inherit">
+          <TableHead className="min-w-full pl-4">Title</TableHead>
+          <TableHead className="w-32 pr-8 text-left">Amount</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {props.expenseEntries && props.expenseEntries.length > 0 ? (
-          props.expenseEntries.map((entry) => (
-            <TableRow key={entry.id}>
-              <TableCell className="min-w-full border-r pl-4 font-medium">
-                <div className="w-full max-w-56 overflow-hidden text-ellipsis text-wrap">
-                  <Badge variant="secondary" className="mr-2 min-w-7 justify-center px-1">
-                    {entry.tag === 'none' ? '-' : entry.tag}
-                  </Badge>
-                  <span>{entry.title}</span>
-                </div>
-              </TableCell>
-              <TableCell className="w-24 text-left">
-                {props.currency} {(Math.round(entry.amount * 100) / 100).toFixed(2)}
-              </TableCell>
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell className="text-center font-medium" colSpan={2}>
-              No Entries
-            </TableCell>
-          </TableRow>
-        )}
+        <TableRow className="hover:bg-inherit">
+          <TableCell colSpan={2}>
+            <Accordion type="single" collapsible className="w-full">
+              {props.expenseEntries && props.expenseEntries.length > 0 ? (
+                props.expenseEntries.map((entry) => (
+                  <AccordionItem key={entry.id} value={`${entry.id}`}>
+                    <AccordionTrigger className="w-full decoration-transparent">
+                      <div className="mr-2 flex w-32 flex-grow self-start">
+                        <Badge variant="secondary" className="mr-2 w-7 justify-center">
+                          {entry.tag === "none" ? "-" : entry.tag}
+                        </Badge>
+                        <p>{entry.title}</p>
+                      </div>
+                      <div className="flex w-24 self-end pr-4">
+                        {props.currency}
+                        {(Math.round(entry.amount * 100) / 100).toFixed(2)}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex flex-row items-center justify-center align-middle">
+                        <div className="flex flex-grow">
+                          <p className={entry.description && entry.description !== "" ? "" : "text-secondary"}>
+                            {entry.description && entry.description !== "" ? entry.description : "No Description"}
+                          </p>
+                        </div>
+                        <ButtonDeleteExpenseEntry className="ml-auto" entry={entry} />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))
+              ) : (
+                <p>No Entries</p>
+              )}
+            </Accordion>
+          </TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   );
