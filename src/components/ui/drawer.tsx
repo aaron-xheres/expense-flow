@@ -73,7 +73,7 @@ const DrawerContentUndecorated = React.forwardRef<
     </DrawerPrimitive.Content>
   </DrawerPortal>
 ))
-DrawerContent.displayName = "DrawerContent"
+DrawerContentUndecorated.displayName = "DrawerContentUndecorated"
 
 const DrawerHeader = ({
   className,
