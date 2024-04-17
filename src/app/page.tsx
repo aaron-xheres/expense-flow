@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   return (
-    <main className="flex min-h-full min-w-full flex-grow items-center justify-center">
+    <main className="flex min-h-full min-w-full items-center justify-center">
       <div className="p-4">
         <Card>
           <CardHeader className="items-center justify-center text-center">

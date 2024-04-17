@@ -3,7 +3,6 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ButtonDeleteExpenseEntry } from "@/components/buttonDeleteExpenseEntry";
 import { cn } from "@/lib/utils";
 
@@ -14,14 +13,12 @@ type Props = {
 };
 
 export default function ExpenseTable(props: Props) {
-  console.log(props.expenseEntries);
-
   return (
     <Table>
       <TableHeader className="border-b-2">
         <TableRow className="hover:bg-inherit">
           <TableHead className="min-w-full pl-4">Title</TableHead>
-          <TableHead className="w-32 pr-8 text-left">Amount</TableHead>
+          <TableHead className="w-32 pr-8 text-left">Amount</TableHead>  
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -56,7 +53,7 @@ export default function ExpenseTable(props: Props) {
                   </AccordionItem>
                 ))
               ) : (
-                <p>No Entries</p>
+                <div></div>
               )}
             </Accordion>
           </TableCell>

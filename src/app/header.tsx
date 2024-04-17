@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Props = {
   drawerOpenFn?: () => void;
@@ -12,7 +13,9 @@ export function Header(props: Props) {
       <Button variant="ghost" className="focus: bg-inherit" onClick={props.drawerOpenFn}>
         <p className="text-xl">☰</p>
       </Button>
-      <p className="align-middle">Expense Flow</p>
+      <Link href={"/"}>
+        <p className="align-middle">Expense Flow</p>
+      </Link>
     </div>
   );
 }

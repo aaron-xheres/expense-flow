@@ -41,8 +41,8 @@ export function ButtonDeleteExpenseEntry(props: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Entry?</AlertDialogTitle>
           <AlertDialogDescription>
-            <p>Confirm to delete entry</p>
-            <p>{props.entry.title}</p>
+            Confirm to delete entry <br />
+            {props.entry.title}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

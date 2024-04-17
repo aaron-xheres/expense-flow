@@ -19,7 +19,6 @@ export default function ExpensePage({ params }: { params: { id: string } }) {
       <Card className="min-w-full">
         <CardHeader className="flex-row items-center justify-start space-y-0">
           <CardTitle className="w-full flex-grow">{expense?.name}</CardTitle>
-          <br />
           <CardDescription>
             {expense?.currency}
             {expense?.total.toFixed(2)}

@@ -9,6 +9,8 @@ import { ScrollArea } from "./ui/scroll-area";
 import { DrawerClose } from "./ui/drawer";
 import { Button } from "./ui/button";
 
+import { ButtonDeleteExpense } from "./buttonDeleteExpense";
+
 export function DrawerExpenseList() {
   const expenseCategory = useLiveQuery(() =>
     db.expenseCategory.toArray().then((arr) => {
@@ -34,16 +36,19 @@ export function DrawerExpenseList() {
           {category.list.map((id) => {
             const expense = expenseList?.find((list) => list.id === id);
             return (
-              <Link key={id} href={`/expense/${id}`}>
-                <DrawerClose asChild>
-                  <Button variant="outline" className="my-2 min-w-full justify-start">
-                    <div className="flex w-full">{expense?.name}</div>
-                    <div className="ml-auto flex">
-                      {expense?.currency} {expense?.total}
-                    </div>
-                  </Button>
-                </DrawerClose>
-              </Link>
+              <div key={id} className="grid grid-cols-5 items-center gap-4 align-middle">
+                <Link href={`/expense/${id}`} className="col-span-4">
+                  <DrawerClose asChild>
+                    <Button variant="outline" className="my-2 min-w-full justify-start">
+                      <div className="flex w-full">{expense?.name}</div>
+                      <div className="ml-auto flex">
+                        {expense?.currency} {expense?.total}
+                      </div>
+                    </Button>
+                  </DrawerClose>
+                </Link>
+                <ButtonDeleteExpense expense={expense} />
+              </div>
             );
           })}
         </div>
